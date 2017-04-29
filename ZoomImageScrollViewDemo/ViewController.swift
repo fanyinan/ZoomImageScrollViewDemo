@@ -35,15 +35,15 @@ class ViewController: UIViewController {
     
     title = "PhotoBrowser"
     
-    view.backgroundColor = UIColor.groupTableViewBackgroundColor()
+    view.backgroundColor = UIColor.groupTableViewBackground
     
     let layout = UICollectionViewFlowLayout()
     collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
-    collectionView.backgroundColor = UIColor.blackColor()
-    collectionView.registerNib(UINib(nibName: identifierCell, bundle: nil), forCellWithReuseIdentifier: identifierCell)
+    collectionView.backgroundColor = UIColor.black
+    collectionView.register(UINib(nibName: identifierCell, bundle: nil), forCellWithReuseIdentifier: identifierCell)
     collectionView.dataSource = self
     collectionView.delegate = self
-    collectionView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+    collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     
     view.addSubview(collectionView)
     
@@ -55,18 +55,18 @@ class ViewController: UIViewController {
 
 extension ViewController: UICollectionViewDataSource {
   
-  func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return imageCount
   }
   
-  func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+  func numberOfSections(in collectionView: UICollectionView) -> Int {
     return 1
   }
   
   
-  func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     
-    let cell = collectionView.dequeueReusableCellWithReuseIdentifier(identifierCell, forIndexPath: indexPath) as! VisitedMeCollectionViewCell
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifierCell, for: indexPath) as! VisitedMeCollectionViewCell
     
     cell.avatarImageView.image = UIImage(named: "image\(indexPath.row)")
     
@@ -77,7 +77,7 @@ extension ViewController: UICollectionViewDataSource {
 
 extension ViewController: UICollectionViewDelegateFlowLayout {
   
-  func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     
     var width: CGFloat = 0
     width = (view.frame.width - CGFloat(numOfCol - 1) * hSpace) / CGFloat(numOfCol)
@@ -88,23 +88,23 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     return size
   }
   
-  func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
     return vSpace
   }
   
-  func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
     return 0
   }
   
 }
 
 extension ViewController: UICollectionViewDelegate {
-  func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     
     guard let image = UIImage(named:"image\(indexPath.row)") else { return }
     
     let vc = ImageDisplayViewController(image: image)
-    presentViewController(vc, animated: false, completion: nil)
+    present(vc, animated: false, completion: nil)
   }
   
 }

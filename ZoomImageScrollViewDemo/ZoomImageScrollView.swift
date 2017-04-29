@@ -10,11 +10,11 @@ import UIKit
 
 class ZoomImageScrollView: UIScrollView {
 
-  private var image: UIImage
+  fileprivate var image: UIImage
   
-  private var imageView: UIImageView!
-  private var singleTap: UITapGestureRecognizer!
-  private var doubleTap: UITapGestureRecognizer!
+  fileprivate var imageView: UIImageView!
+  fileprivate var singleTap: UITapGestureRecognizer!
+  fileprivate var doubleTap: UITapGestureRecognizer!
   
   init(image: UIImage, frame: CGRect) {
     
@@ -37,36 +37,36 @@ class ZoomImageScrollView: UIScrollView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func addImageTarget(target: AnyObject, action: Selector) {
+  func addImageTarget(_ target: AnyObject, action: Selector) {
     singleTap.addTarget(target, action: action)
   }
   
-  func imageViewDoubleTap(tap: UITapGestureRecognizer) {
+  func imageViewDoubleTap(_ tap: UITapGestureRecognizer) {
   
     guard zoomScale == minimumZoomScale else {
       setZoomScale(minimumZoomScale, animated: true)
       return
     }
     
-    let position = tap.locationInView(imageView)
+    let position = tap.location(in: imageView)
     
     let zoomRectScale: CGFloat = 2
     
-    let zoomWidth = (image.size.width + imageView.frame.minX * 2) / zoomRectScale
-    let zoomHeight = (image.size.height + imageView.frame.minY * 2) / zoomRectScale
+    let zoomWidth = frame.width / zoomScale / zoomRectScale
+    let zoomHeight = frame.height / zoomScale / zoomRectScale
     
-    let zoomX = position.x - zoomWidth / 2 - imageView.frame.minX / zoomRectScale
-    let zoomY = position.y - zoomHeight / 2 - imageView.frame.minY / zoomRectScale
+    let zoomX = position.x - zoomWidth / 2 - imageView.frame.minX / zoomScale / zoomRectScale
+    let zoomY = position.y - zoomHeight / 2 - imageView.frame.minY / zoomScale / zoomRectScale
     
     let zoomRect = CGRect(x: zoomX, y: zoomY, width: zoomWidth, height: zoomHeight)
-    zoomToRect(zoomRect, animated: true)
+    zoom(to: zoomRect, animated: true)
     
   }
   
-  private func setupUI() {
+  fileprivate func setupUI() {
     
-    scrollEnabled = false
-    backgroundColor = UIColor.blackColor()
+    isScrollEnabled = false
+    backgroundColor = UIColor.black
     singleTap = UITapGestureRecognizer()
     addGestureRecognizer(singleTap)
     
@@ -75,16 +75,16 @@ class ZoomImageScrollView: UIScrollView {
     addSubview(imageView)
     
     doubleTap = UITapGestureRecognizer(target: self, action: #selector(ZoomImageScrollView.imageViewDoubleTap(_:)))
-    imageView.userInteractionEnabled = true
+    imageView.isUserInteractionEnabled = true
     imageView.addGestureRecognizer(doubleTap)
 
     doubleTap.numberOfTapsRequired = 2
-    singleTap.requireGestureRecognizerToFail(doubleTap)
+    singleTap.require(toFail: doubleTap)
     
     calculateZoomScale()
   }
   
-  private func calculateZoomScale() {
+  fileprivate func calculateZoomScale() {
     
     let boundSize = bounds.size
     let imageSize = image.size
@@ -104,7 +104,7 @@ class ZoomImageScrollView: UIScrollView {
     
   }
   
-  private func moveFrameToCenter() {
+  fileprivate func moveFrameToCenter() {
     
     let boundsSize = bounds.size
     let imageViewSize = imageView.frame.size
@@ -127,16 +127,16 @@ class ZoomImageScrollView: UIScrollView {
 
 extension ZoomImageScrollView: UIScrollViewDelegate {
   
-  func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+  func viewForZooming(in scrollView: UIScrollView) -> UIView? {
     return imageView
   }
   
-  func scrollViewDidZoom(scrollView: UIScrollView) {
+  func scrollViewDidZoom(_ scrollView: UIScrollView) {
     setNeedsLayout()
     layoutIfNeeded()
   }
   
-  func scrollViewWillBeginZooming(scrollView: UIScrollView, withView view: UIView?) {
-    scrollEnabled = true
+  func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+    isScrollEnabled = true
   }
 }

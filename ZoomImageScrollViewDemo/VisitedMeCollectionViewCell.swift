@@ -15,7 +15,7 @@ class VisitedMeCollectionViewCell: UICollectionViewCell {
   override func awakeFromNib() {
     super.awakeFromNib()
     
-    avatarImageView.contentMode = UIViewContentMode.ScaleAspectFill
+    avatarImageView.contentMode = UIViewContentMode.scaleAspectFill
 
   }
 }

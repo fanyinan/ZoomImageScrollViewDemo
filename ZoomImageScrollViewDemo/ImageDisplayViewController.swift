@@ -30,7 +30,7 @@ class ImageDisplayViewController: UIViewController {
     setupUI()
   }
   
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     
     statusBarHidden = true
     setNeedsStatusBarAppearanceUpdate()
@@ -41,23 +41,30 @@ class ImageDisplayViewController: UIViewController {
     // Dispose of any resources that can be recreated.
   }
   
-  override func prefersStatusBarHidden() -> Bool {
+  override var prefersStatusBarHidden : Bool {
     return statusBarHidden
   }
   
   func onClickPhoto() {
     
-    dismissViewControllerAnimated(false, completion: nil)
+    dismiss(animated: false, completion: nil)
   }
   
   func setupUI() {
     
     zoomImageScrollView = ZoomImageScrollView(image: image, frame: view.bounds)
-    zoomImageScrollView.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
+    zoomImageScrollView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     view.addSubview(zoomImageScrollView)
     zoomImageScrollView.addImageTarget(self, action: #selector(ImageDisplayViewController.onClickPhoto))
     
-    view.backgroundColor = UIColor.greenColor()
+    view.backgroundColor = UIColor.green
+    
+    //红点是中点，同时也始终在双击放大是点击的位置（如果图片没超过边界的话）
+    let testView = UIView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 3, height: 3)))
+    testView.isUserInteractionEnabled = false
+    testView.center = CGPoint(x: view.frame.midX, y: view.frame.midY)
+    testView.backgroundColor = UIColor.red
+    view.addSubview(testView)
   }
   
   
